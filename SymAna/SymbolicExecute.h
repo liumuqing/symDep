@@ -21,7 +21,6 @@ struct Instruction
 			if (operandExpressions[i])
 			{
 				throw Error("Instruction::operandExpressions has an non-null element.");
-
 			}
 		}
 	};

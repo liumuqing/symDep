@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-void (*Expression::onConstruct)(Expression *) = nullptr;
-void (*Expression::onUnconstruct)(Expression *) = nullptr;
-void (*Expression::onDecRefCount)(Expression *) = nullptr;
+void(*Expression::onConstruct)(Expression *) = nullptr;
+void(*Expression::onUnconstruct)(Expression *) = nullptr;
+void(*Expression::onDecRefCount)(Expression *) = nullptr;
 Expression Expression::noneExpression;
 void Expression::init()
 {

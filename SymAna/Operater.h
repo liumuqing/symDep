@@ -9,9 +9,9 @@ enum Operater
 	NEG, NOT,
 	MOV, LEA, XCHG,
 	PUSH, POP,
-	DEREF, 
+	DEREF,
 
-	SCASB, 
+	SCASB,
 	CDQ, CBW, CWD, CWDE,
 	NOP,
 
