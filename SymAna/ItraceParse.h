@@ -2,33 +2,29 @@
 #include "Operand.h"
 Operand operandStrToOperand(const char * operandsStr)
 {
-	char buff[16];
 	Operand retv;
 	retv.length = 0;
-	int len = strlen(operandsStr);
+	unsigned int len = strlen(operandsStr);
 
 	if (operandsStr[0] == '[')
 	{
-
-		retv.num_indirectRegisters= 0;
+		retv.num_indirectRegisters = 0;
 		retv.value = 0;
 		int multiplier = 1;
 		int startPos = 1;//当前匹配到表达式的元素的开始位置
-		int i;
-		for (i = 1; i < len; i++)
+		for (unsigned int i = 1; i < len; i++)
 		{
 			if (operandsStr[i] == '+' || operandsStr[i] == '-' || operandsStr[i] == ']')
 			{
 				if (i - startPos == 0)
 				{
 					if (operandsStr[i] == '-') multiplier = -1;
-					else multiplier == 1;
+					else multiplier = 1;
 					startPos = i + 1;
 					continue;
 				}
 
-				int j;
-
+				unsigned int j;
 				for (j = startPos; j < i; j++)
 				if (operandsStr[j] == '*')
 					break;
@@ -36,7 +32,7 @@ Operand operandStrToOperand(const char * operandsStr)
 				if (i == j)
 				{
 					bool isReg = false;//中间不包括乘号的话，可能是IMM也可能是寄存器
-					for (int k = startPos; k < j; k++)
+					for (unsigned int k = startPos; k < j; k++)
 					{
 						if (operandsStr[k] < '0' || (operandsStr[k] > '9' && operandsStr[k] < 'a') || operandsStr[k] > 'f')
 						{
@@ -48,7 +44,7 @@ Operand operandStrToOperand(const char * operandsStr)
 					{
 						retv.indirectMultiplier[retv.num_indirectRegisters] = multiplier;
 						retv.indirectRegisters[retv.num_indirectRegisters] =
-							stringToRegister(&operandsStr[startPos], j-startPos);
+							stringToRegister(&operandsStr[startPos], j - startPos);
 						retv.num_indirectRegisters += 1;
 					}
 					else
@@ -96,7 +92,6 @@ Operand operandStrToOperand(const char * operandsStr)
 
 bool itraceParse(Instruction * destInst, const char * lineBuffer, ConcreteMemory * concreteMemory)
 {
-
 	unsigned int regs[8];
 	unsigned int instAddr;
 	unsigned int threadId;
@@ -126,12 +121,12 @@ bool itraceParse(Instruction * destInst, const char * lineBuffer, ConcreteMemory
 	concreteMemory->put(Operand(ebp), regs[6]);
 	concreteMemory->put(Operand(esp), regs[7]);
 
-	Instruction& inst = * (destInst);
+	Instruction& inst = *(destInst);
 	char operaterStr[8];
 	char operandStrs[MAX_NUM_OPERANDS][32];
 	int num_operandStrs = 0;
 	//跳过最后一个空格
-	for (int i = 0; i < strlen(instStr) - 1; i++)
+	for (unsigned int i = 0; i < strlen(instStr) - 1; i++)
 	{
 		if (instStr[i] == ' ') num_operandStrs += 1;
 	}
@@ -159,9 +154,7 @@ bool itraceParse(Instruction * destInst, const char * lineBuffer, ConcreteMemory
 		std::cout.flush();
 		throw Error("too much operands");
 	}
-	int memLen = (strlen(memStr)?memStr[1] - '0':0);
-
-
+	int memLen = (strlen(memStr) ? memStr[1] - '0' : 0);
 
 	//inst.Operater generation
 	if (strcmp(operaterStr, "stosb") == 0)
@@ -182,7 +175,6 @@ bool itraceParse(Instruction * destInst, const char * lineBuffer, ConcreteMemory
 		strcpy(operandStrs[num_operandStrs++], "eax");
 		memLen = 4;
 	}
-
 
 	if (strcmp(operaterStr, "mov") == 0 ||
 		strcmp(operaterStr, "movsd") == 0 ||
@@ -301,12 +293,13 @@ bool itraceParse(Instruction * destInst, const char * lineBuffer, ConcreteMemory
 		inst.operands[i] = operandStrToOperand(operandStrs[i]);
 		if (strlen(operaterStr) == 5 && inst.operater == MOV)
 		{
-				if (operaterStr[4] == 'x' && inst.operands[i].length == 0)
-					inst.operands[i].length = memLen;
+			if (operaterStr[4] == 'x' && inst.operands[i].length == 0)
+				inst.operands[i].length = memLen;
 		}
 		if (inst.operands[i].length == 0)
 		{
 			inst.operands[i].length = memLen;
 		}
 	}
+	return true;
 }

@@ -6,7 +6,7 @@
 ITraceConcreteMemory::ITraceConcreteMemory()
 {
 	unsigned int maxOffset = 0;
-	for (int i = 0; i < REG4_LEN; i++)
+	for (unsigned int i = 0; i < REG4_LEN; i++)
 	{
 		maxOffset = std::max(registerOffset(REG4[i]), maxOffset);
 	}
@@ -24,6 +24,7 @@ unsigned int ITraceConcreteMemory::get(unsigned int address, unsigned int len)
 #ifndef RELEASE
 	if (address % len != 0) throw Error("ITraceConcreteMemory::get 未对齐");
 	if (address + len > memoryLen * 4) throw Error("ITraceConcreteMemory::get 溢出");
+	if (len > 4) throw Error("ItraceConcreteMemory::get 长度过长");
 #endif
 	unsigned int returnValue = 0;
 	memcpy(&returnValue, ((char*)memory + address), len);
@@ -35,6 +36,7 @@ unsigned int ITraceConcreteMemory::put(unsigned int address, unsigned int len, u
 #ifndef RELEASE
 	if (address % len != 0) throw Error("ITraceConcreteMemory::get 未对齐");
 	if (address + len > memoryLen * 4) throw Error("ITraceConcreteMemory::get 溢出");
+	if (len > 4) throw Error("ItraceConcreteMemory::get 长度过长");
 #endif
 	memcpy(((char*)memory + address), &value, len);
 	return value;

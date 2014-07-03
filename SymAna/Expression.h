@@ -14,7 +14,7 @@ public:
 
 	static class Expression* create(const enum Operater& operater, unsigned int num_operands = 0, 
 										...);
-	static class Expression* create(const class Operand& operand);
+	static class Expression* create(const struct Operand& operand);
 	static class Expression* create(class Expression * expression);
 
 	const char * getStr();

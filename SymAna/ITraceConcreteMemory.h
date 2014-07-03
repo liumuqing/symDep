@@ -11,5 +11,5 @@ public:
 
 private:
 	unsigned int * memory;
-	int memoryLen;
+	unsigned int memoryLen;
 };

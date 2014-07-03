@@ -8,11 +8,13 @@
 #include <iostream>
 #include "ItraceParse.h"
 #include "Expression.h"
+#include <stdint.h>
 
-std::unordered_set<int> addressHasBeenWritten;
+std::unordered_set<uint32_t> addressHasBeenWritten;
+
 void beforeGet(SymbolicMemory * symbolicMemory, unsigned int address, unsigned int memoryLength)
 {
-	if (address < 100) return;
+	if (address + memoryLength < REG_TOTAL_BYTE) return;
 	bool hasNotBeenWritten[4] = { false, false, false, false };
 	unsigned int i;
 	for (i = 0; i < memoryLength; i++)
@@ -65,7 +67,7 @@ void onConstruct(Expression * expression)
 	}
 	else
 	{
-		for (int i = 0; i < expression->num_operands; i++)
+		for (unsigned int i = 0; i < expression->num_operands; i++)
 		{
 			if (expression->operands[i]->deep >= 0)
 				expression->deep = (expression->operands[i]->deep + 1 > expression->deep ?
@@ -103,7 +105,7 @@ unsigned int relatedMemSize(Expression * expression)
 			set.insert(exp);
 			break;
 		case Expression::ExpressionType::EXPRESSION:
-			for (int i = 0; i < exp->num_operands; i++)
+			for (unsigned int i = 0; i < exp->num_operands; i++)
 			{
 				if (set.find(exp->operands[i]) == set.end())
 				{
@@ -145,7 +147,7 @@ std::vector<Operand> relatedMemSet(Expression * expression)
 			set.insert(exp);
 			break;
 		case Expression::ExpressionType::EXPRESSION:
-			for (int i = 0; i < exp->num_operands; i++)
+			for (unsigned int i = 0; i < exp->num_operands; i++)
 			{
 				if (set.find(exp->operands[i]) == set.end())
 				{
@@ -278,9 +280,9 @@ int main(int argc, char ** argv)
 				printf("[%08x:2^%d] %d %d %lf\n", j->first, i, j->second->deep, relatedSize,
 					(double)relatedSize / addressHasBeenWritten.size());
 				auto v = relatedMemSet(j->second);
-				for (int i = 0; i < v.size(); i++)
+				for (unsigned int i = 0; i < v.size(); i++)
 				{
-					for (int j = i + 1; j < v.size(); j++)
+					for (unsigned int j = i + 1; j < v.size(); j++)
 					{
 						if (v[i].value > v[j].value)
 						{
@@ -290,7 +292,7 @@ int main(int argc, char ** argv)
 						}
 					}
 				}
-				for (int i = 0; i < v.size(); i++)
+				for (unsigned int i = 0; i < v.size(); i++)
 					fprintf(fp2, "[%08x:%d] ", v[i].value, v[i].length);
 				fflush(fp2);
 
@@ -321,12 +323,12 @@ int main(int argc, char ** argv)
 			list.pop_back();
 			if (exp->type == Expression::ExpressionType::VALUE && exp->operand.type == DIRECT_MEM)
 			{
-				for (int i = 0; i < exp->operand.length; i++)
+				for (unsigned int i = 0; i < exp->operand.length; i++)
 				{
 					memAddress_set.insert(exp->operand.value + i);
 				}
 			}
-			for (int i = 0; i < exp->num_operands; i++)
+			for (unsigned int i = 0; i < exp->num_operands; i++)
 			{
 				if (set.find(exp->operands[i]) == set.end())
 				{

@@ -22,6 +22,7 @@ extern Register REG1[];
 extern const unsigned int REG_ALL_LEN;
 extern Register REG_ALL[];
 
+extern const unsigned int REG_TOTAL_BYTE;
 unsigned int registerLength(Register reg);
 
 unsigned int registerOffset(Register reg);//将32位寄存器依次排列，返回某一寄存器的偏移量，比如说ax就返回0, ah就返回1， ebx返回4, 必须从0开始，紧密排列

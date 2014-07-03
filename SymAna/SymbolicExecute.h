@@ -16,7 +16,7 @@ struct Instruction
 #ifndef RELEASE
 	~Instruction()
 	{
-		for (int i = 0; i < num_operands; i++)
+		for (unsigned int i = 0; i < num_operands; i++)
 		{
 			if (operandExpressions[i])
 			{

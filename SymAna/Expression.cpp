@@ -24,7 +24,7 @@ Expression * Expression::create(const Operater& operater, unsigned int num_opera
 	va_start(ap, num_operands);
 
 	Expression * operands[MAX_NUM_OPERANDS];
-	int i = 0;
+	unsigned int i = 0;
 	while (i < num_operands)
 	{
 		operands[i++] = va_arg(ap, Expression *);

@@ -12,7 +12,7 @@ public:
 
 	virtual ~ConcreteMemory(){};
 
-	virtual unsigned int get(const class Operand& operand)
+	virtual unsigned int get(const struct Operand& operand)
 	{
 		switch (operand.type)
 		{
@@ -24,7 +24,7 @@ public:
 			throw Error("ConcreteMemory::get Error");
 		}
 	}
-	virtual unsigned int put(const class Operand& operand, unsigned int value)
+	virtual unsigned int put(const struct Operand& operand, unsigned int value)
 	{
 		switch (operand.type)
 		{

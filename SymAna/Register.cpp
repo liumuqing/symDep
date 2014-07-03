@@ -17,6 +17,8 @@ Register REG_ALL[REG_ALL_LEN] = {
 	al, bl, cl, dl, ah, bh, ch, dh,
 };
 
+const unsigned int REG_TOTAL_BYTE = 8 * 4;
+
 unsigned int registerLength(Register reg)
 {
 	switch (char(reg) & 0xf0)
